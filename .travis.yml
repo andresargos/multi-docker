@@ -9,7 +9,7 @@ script:
 
 after_success:
   - docker build -t gorillavila/multi-client ./client
-  - docker build -t gorillavila/multi-nginz ./nginz
+  - docker build -t gorillavila/multi-nginx ./nginx
   - docker build -t gorillavila/multi-server ./server
   - docker build -t gorillavila/multi-worker ./worker
 
