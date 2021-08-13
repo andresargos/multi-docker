@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+before_install: 
+  - docker build -t gorillavila/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true gorillavila/react-test npm test
+
+after_success:
+  - docker build -t gorillavila/multi-client ./client
+  - docker build -t gorillavila/multi-nginz ./nginz
+  - docker build -t gorillavila/multi-server ./server
+  - docker build -t gorillavila/multi-worker ./worker
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push gorillavila/multi-client
+  - docker push gorillavila/multi-nginx
+  - docker push gorillavila/multi-server
+  - docker push gorillavila/multi-worker
